@@ -32,9 +32,14 @@ type InputDevice struct {
 	CapabilitiesFlat map[int][]int
 }
 
-// Open an evdev input device.
+// Open an evdev input device as read only
 func Open(devnode string) (*InputDevice, error) {
-	f, err := os.Open(devnode)
+	return OpenDevice(devnode, os.O_RDONLY)
+}
+
+// OpenDevice opens a device in the mode provided
+func OpenDevice(devnode string, mode int) (*InputDevice, error) {
+	f, err := os.OpenFile(devnode, mode, 0)
 	if err != nil {
 		return nil, err
 	}
